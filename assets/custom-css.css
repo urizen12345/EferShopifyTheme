@@ -424,7 +424,7 @@ a:not([href]) {
 .header:not(.drawer-menu).page-width {
   padding-left: 3rem !important;
   padding-right: 3rem !important;
-  background-color: red;
+ 
 }
 
 sticky-header.header-wrapper.color-scheme-780aefb6-091f-4f47-93c6-5cb62217dc04.gradient.header-wrapper--border-bottom {

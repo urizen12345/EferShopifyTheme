@@ -60,6 +60,9 @@ $(document).ready(function () {
 
 
   /* HOME */ 
+ 
+ 
+
   $('.icon-content-item').click(function () {
       var tab_class = $(this).attr('href');
   
