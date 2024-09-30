@@ -3324,7 +3324,7 @@ sticky-header.header-wrapper.color-scheme-780aefb6-091f-4f47-93c6-5cb62217dc04.g
 
 
 
-}
+
 
 @media screen and (max-width: 1440px) {
   /* default */
@@ -3379,6 +3379,7 @@ sticky-header.header-wrapper.color-scheme-780aefb6-091f-4f47-93c6-5cb62217dc04.g
   .header:not(.drawer-menu).page-width {
     padding-left: 1rem !important;
     padding-right: 0 !important;
+    background-color: red;
   }
 
   .desktop-btn {
