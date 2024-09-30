@@ -1,0 +1,49 @@
+{% comment %}
+    This code assumes you're working within a product loop.
+{% endcomment %}
+
+{% assign first_variant = product.variants.first %}
+{% assign second_variant = product.options[1] %}
+{% assign other_variants = product.variants | slice: 1, product.variants.size %}
+
+<div class="variant-picker">
+    <div class="variant-option">
+        <label for="variant-option-{{ first_variant.id }}">
+            {{ first_variant.title }} - {{ first_variant.price | money }}
+        </label>
+        <ul class="bullet-options">
+            {% for option_value in first_variant.options %}
+                <li>
+                    <input type="radio" id="variant-option-{{ first_variant.id }}-{{ option_value | handle }}" name="variant-{{ option_value | handle }}" value="{{ option_value }}" {% if forloop.first %}checked{% endif %}>
+                    <label for="variant-option-{{ first_variant.id }}-{{ option_value | handle }}">{{ option_value }}</label>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="variant-option">
+        <label for="variant-dropdown">{{ second_variant }}:</label>
+        <select id="variant-dropdown">
+            {% for variant in other_variants %}
+                <option value="{{ variant[second_variant] }}">{{ variant[second_variant] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+<style>
+    /* Additional CSS for styling the variant picker */
+    .variant-picker {
+        margin-bottom: 20px;
+    }
+    .variant-option {
+        margin-bottom: 10px;
+    }
+    .bullet-options {
+        list-style-type: none;
+        padding: 0;
+    }
+    .bullet-options li {
+        margin-bottom: 5px;
+    }
+</style>

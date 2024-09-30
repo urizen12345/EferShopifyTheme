@@ -1,0 +1,388 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}%;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}%;
+    background-color: {{ section.settings.section_background_color }};
+    {% if section.settings.section_background_img %}
+    background-image: url({{ section.settings.section_background_img | img_url: 'master' }});
+    {% endif %}
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  .section-{{ section.id }}-padding .subheading {
+    color: {{ section.settings.subheading_color }}
+  }
+  .section-{{ section.id }}-padding .main-heading {
+    color: {{ section.settings.heading_color }}
+  }
+  .section-{{ section.id }}-padding .body,
+  .section-{{ section.id }}-padding .section-custom-content{
+    color: {{ section.settings.content_color }}
+  }
+  
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}%;
+      padding-bottom: {{ section.settings.padding_bottom }}%;
+    }
+  }
+
+
+.section-{{ section.id }} .section-heading {
+   text-align: {{ section.settings.heading_align }};
+}
+
+.section-{{ section.id }} .image-box-wrapper {
+    display: flex; 
+    {% for block in section.blocks %}
+  
+       gap:{{block.settings.icon_gap}}%;
+  
+    {% endfor %}  
+}
+
+.head-text-{{ section.id }} {
+  text-align: {{ section }}
+}  
+
+.section-{{ section.id }} .image-box-wrapper .image-box-item{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center; 
+}
+.section-{{ section.id }} .image-box-wrapper .image-box-item img{
+    object-fit: contain;  
+}
+
+
+  
+
+{%- endstyle -%}
+
+<head>
+<head>
+   
+</head>
+</head>
+
+<div class="section-wrapper background-sec {{ section.settings.class_name }} section-{{ section.id }}-padding section-{{ section.id }}">
+  
+  <div class="page-width"> 
+    <div class="content-wrap"> 
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'heading' -%}
+              
+                <h2 class="head text-{{ block.settings.head_text_align }}">{{ block.settings.heading_text }}</h2>   
+      
+              {%- when 'sub_heading' -%}
+              
+                <h3 class="subhead text-align-{{ block.settings.subhead_text_align }}">{{ block.settings.sub_heading }} </h3> 
+          
+              {%- when 'paragraph' -%}
+              
+               <div class="paragraph">{{ block.settings.paragraph_content }}</div>
+              
+              {%- when 'button' -%}
+              
+              <button class="default-btn"><a href="{{ block.settings.button_link }}">{{ block.settings.button_text }}</a></button>
+
+              {%- when 'icon_with_heading' -%}
+
+               <div class="image-box-wrapper" {{block.settings.text_style}}" {{block.shopify_attributes}}>
+                    {% if block.settings.icon1!= blank or block.settings.icon_heading1 != blank %}
+                      <div class="image-box-item">
+                        <img class="m-auto img-responsive" src="{% if block.settings.icon1 != blank %} {{block.settings.icon1 | img_url: 'master'}} {% endif %}" alt="{{block.settings.icon1.alt}}" width="{{block.settings.icon1.width}}" height="{{block.settings.icon1.height}}">
+                        <h3>{{block.settings.icon_heading1}}</h3>
+                      </div>
+                    {% endif %}
+                    {% if block.settings.icon2 != blank or block.settings.icon_heading2 != blank %}
+                      <div class="image-box-item">
+                        <img class="m-auto img-responsive" src="{% if block.settings.icon2 != blank %} {{ block.settings.icon2 | img_url: 'master' }} {% endif %}" alt="{{ block.settings.icon2.alt }}" width="{{ block.settings.icon2.width }}" height="{{ block.settings.icon2.height }}">
+                       <h3>{{block.settings.icon_heading2}}</h3>
+                      </div>
+                    {% endif %}
+                    {% if block.settings.icon3 != blank or block.settings.icon_heading3 != blank %}
+                      <div class="image-box-item">
+                        <img class="m-auto img-responsive" src="{% if block.settings.icon3 != blank %} {{block.settings.icon3 | img_url: 'master'}} {% endif %}" alt="{{block.settings.icon3.alt}}" width="{{block.settings.icon3.width}}" height="{{block.settings.icon3.height}}">
+                        <h3>{{block.settings.icon_heading3}}</h3>
+                      </div>
+                    {% endif %}
+                    {% if block.settings.icon4 != blank or block.settings.icon_heading4 != blank %}
+                      <div class="image-box-item">
+                        <img class="m-auto img-responsive" src="{% if block.settings.icon4 != blank %} {{block.settings.icon4 | img_url: 'master'}} {% endif %}" alt="{{block.settings.icon4.alt}}" width="{{block.settings.icon4.width}}" height="{{block.settings.icon4.height}}">
+                        <h3>{{block.settings.icon_heading4}}</h3>
+                      </div> 
+                    {% endif %}  
+               </div>
+
+            {% endcase %}
+          {%- endfor -%}  
+         <!-- Testimonial slider -->
+          <div class="testimonial-wrapper scroll-trigger animate--slide-in">
+            {%- for block in section.blocks -%}
+                {%- case block.type -%}
+                  
+                  {%- when 'testimonial_item' -%}
+                  <div class="testimonial-item">
+                    <div class="testimonial-image-wrap">
+                      <img class="testimonial-image img-responsive" src="{{ block.settings.testimonial_image | img_url }}" alt="{{ block.settings.testimonial_image.alt }}" width="{{ block.settings.testimonial_image.width }}" height="{{ block.settings.testimonial_image.height }}">
+                    </div> 
+                    <div class="testimonial-headline">
+                       {{ block.settings.testimonial_paragraph }}
+                      <h4 class="testimonial-name">{{ block.settings.testimonial_name }}</h4>   
+                    </div>
+                  </div>
+                  
+                {% endcase %}
+            {%- endfor -%} 
+          </div>
+
+      {% if section.settings.testimonial_button_text != blank %}
+       <div class="testimonial-button-wrap">
+       <button class="m-auto default-btn"><a href="{{ section.settings.testimonial_button_url }}">{{ section.settings.testimonial_button_text }}</a></button>
+      {% endif %}
+       </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+  "name": "Testimonial Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "class_name",
+      "label": "Class Name"
+    },  
+    {
+     "type": "text",
+      "id": "testimonial_button_text",
+      "label": "Testimonial Button Text",
+      "default": "Testimonial button text"
+     },
+    {
+      "type": "url",
+      "id": "testimonial_button_url",
+      "label": "Testimonial Button"
+    },
+    {
+      "type": "image_picker",
+      "id": "section_background_img",
+      "label": "Section Background Image"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section Background Color"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0
+    
+    }, 
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "image_picker",
+      "id": "side_image",
+      "label": "Side Image"
+    } 
+  ],
+  "blocks": [
+     {
+      "name": "Testimonial Item",
+      "type": "testimonial_item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "testimonial_heading",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "testimonial_paragraph",
+          "label": "Testimony"
+        },
+        {
+          "type": "text",
+          "id": "testimonial_name",
+          "label": "Testimonial Name"
+        },
+        {
+          "type": "image_picker",
+          "id": "testimonial_image",
+          "label": "Testimonial Image"
+        }
+      ]
+    },
+    {
+      "name": "Sub Heading",
+      "type": "sub_heading",
+      "settings": [
+        {
+          "type": "text",
+          "id": "sub_heading",
+          "label": "Heading"
+        },
+        {
+        "type": "select",
+        "id": "subhead_text_align",
+        "label": "Sub Heading Text Align",
+        "options": [
+          {
+            "value": "start",
+            "label": "start"
+          },
+          {
+            "value": "center",
+            "label": "center"
+          },
+          {
+            "value": "end",
+            "label": "end"
+          }
+        ],
+        "default": "start"
+      }
+      ]
+    },
+    {
+      "name": "Button",
+      "type": "button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Button Text"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        }
+      ]
+    },
+    {
+      "name": "Heading",
+      "type": "heading",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading_text",
+          "label": "Heading Text"
+        },
+        {
+        "type": "select",
+        "id": "head_text_align",
+        "label": "Heading Text Align",
+        "options": [
+          {
+            "value": "start",
+            "label": "start"
+          },
+          {
+            "value": "center",
+            "label": "center"
+          },
+          {
+            "value": "end",
+            "label": "end"
+          }
+        ],
+        "default": "start"
+       }  
+      ]
+    },
+    {
+      "name": "Paragraph",
+      "type": "paragraph",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "paragraph_content",
+          "label": "Paragraph Content"
+        }
+      ]
+    },
+    {
+      "name": "Icon with heading",
+      "type": "icon_with_heading",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon1",
+          "label": "Icon"
+        },
+        {
+          "type": "textarea",
+          "id": "icon_heading1",
+          "label": "Icon Heading Item 1"
+        },
+         {
+          "type": "image_picker",
+          "id": "icon2",
+          "label": "Icon"
+        },
+        {
+          "type": "textarea",
+          "id": "icon_heading2",
+          "label": "Icon Heading Item 2"
+        },
+         {
+          "type": "image_picker",
+          "id": "icon3",
+          "label": "Icon"
+        },
+        {
+          "type": "textarea",
+          "id": "icon_heading3",
+          "label": "Icon Heading Item 4"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon4",
+          "label": "Icon"
+        },
+        {
+          "type": "textarea",
+          "id": "icon_heading4",
+          "label": "Icon Heading Item 4"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonial Section"
+    }
+  ]
+}
+ 
+{% endschema %}
+
+<script>
+  
+</script>
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

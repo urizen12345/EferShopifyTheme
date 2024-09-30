@@ -1,0 +1,201 @@
+{% comment %} <head>
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+</head> {% endcomment %}
+
+{%- style -%}
+  
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top}}%;
+    padding-bottom: {{ section.settings.padding_bottom}}%;
+    background-color: {{ section.settings.section_background_color }};
+    {% if section.settings.section_background_img %}
+    background-image: url({{ section.settings.section_background_img | img_url: 'master' }});
+    {% endif %}
+    background-position: top center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  .section-{{ section.section.id }} .page-width {
+      
+    {% if section.settings.section_width == 'fullwidth' %}
+      
+     max-width: 95%;
+    
+    {% else %}
+         max-width: 87%;
+    {% endif %}
+  
+  }      
+
+{%- endstyle -%}
+
+
+<div class="section-{{ section.id }}-padding section-{{ section.id }} {{ section.settings.class_name }} section-{{ section.section.id }} scroll-trigger animate--slide-in">
+  <div class="page-width">
+  <div class="icon-with-content-wrap">
+   <h2 class="section-subheading">{{ section.settings.subheading }}</h2> 
+   <h1 class="section-heading">{{ section.settings.heading }}</h1> 
+ 
+  <div class="side-tabs-wrapper">
+     {% for block in section.blocks %}
+      <div class="side-tab {{ block.id }}"></div>
+     {% endfor %}
+  </div>
+  <div class="icon-tabs-wrapper">
+    {% for block in section.blocks %}
+      {% if block.settings.icon_image != blank or block.settings.heading != blank or block.settings.content != blank %}
+        <div class="icon-content-item" href="{{ block.id }}">
+            <div class="icon-image-wrap">
+              {% if  block.settings.icon_image != blank %} <img src="{{ block.settings.icon_image | img_url: 'master' }} }}" alt="icon-image" height="{{ block.settings.icon_image.height }}" width="{{ block.settings.icon_image.width }}"> {% endif %}
+            </div>
+            <div class="content-container">
+                <h2 class="icon-heading">{{ block.settings.heading }}</h2>
+                <div class="icon-paragraph">
+                    {{ block.settings.content }}
+                </div>
+            </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+    {% comment %} 
+   {% for block in section.blocks %}
+   <div class="tab-content {{ block.id }}" >
+             {%- if section.settings.video_url_1.type == 'youtube' -%}
+            <iframe
+              src="https://www.youtube.com/embed/{{ video_id1 }}?enablejsapi=1&autoplay=1{{ loop }}"
+              class="js-youtube"
+              allow="autoplay; encrypted-media"
+              allowfullscreen
+              title="{{ section.settings.description | escape }}"
+            ></iframe>
+
+          {%- else -%}
+            <iframe
+              src="https://player.vimeo.com/video/{{ video_id1 }}?autoplay=1{{ loop }}"
+              class="js-vimeo"
+              allow="autoplay; encrypted-media"
+              allowfullscreen
+              title="{{ section.settings.description | escape }}"
+            ></iframe>
+          {%- endif -%}
+    </div>
+   {% endfor %}
+ {% endcomment %}
+  
+</div>
+  <div class="icon-with-tab-image-wrapper">
+      <img src="https://cdn.shopify.com/s/files/1/0849/7158/5851/files/iPhone_mockup.png?v=1711016804"/> 
+  </div> 
+</div>
+</div>
+
+
+
+{% schema %}
+  {
+  "name": "Icons with tabs",
+  "settings": [
+    {
+      "type": "text",
+      "id": "class_name",
+      "label": "Class Name"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Section Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Section Sub Heading"
+    }
+    ,
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section Width",
+      "options": [
+        {
+          "value": "fullwidth",
+          "label": "fullwidth"
+        },
+        {
+          "value": "boxed",
+          "label": "boxed"
+        }
+      ],
+      "default": "fullwidth"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    },
+    {
+      "type": "image_picker",
+      "id": "section_background_img",
+      "label": "Section Background Image"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section Background Color"
+    }
+  ],
+   "blocks": [
+    {
+      "name": "Tab Item",
+      "type": "tab_item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Icon"
+        },
+        {
+          "type": "textarea",
+          "id": "heading",
+          "label": "Icon Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content 1"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Icons with tabs"
+    }
+  ]
+}  
+{% endschema %}
+
+<script>
+
+
+</script>
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

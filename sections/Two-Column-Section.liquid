@@ -1,0 +1,632 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}%;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}%;
+    background-color: {{ section.settings.section_background_color }};
+    {% if section.settings.section_background_img %}
+    background-image: url({{ section.settings.section_background_img | img_url: 'master' }});
+    {% endif %}
+    background-position: top center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  .section-{{ section.id }}-padding .subheading {
+    color: {{ section.settings.subheading_color }}
+  }
+  .section-{{ section.id }}-padding .main-heading {
+    color: {{ section.settings.heading_color }}
+  }
+  .section-{{ section.id }}-padding .body,
+  .section-{{ section.id }}-padding .section-custom-content{
+    color: {{ section.settings.content_color }}
+  }
+  
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}%;
+      padding-bottom: {{ section.settings.padding_bottom }}%;
+    }
+  }
+
+.section-{{ section.id }} .content-wrap{
+    display: flex;
+
+}
+
+.section-{{ section.id }} .content-wrap .column-1 {
+    flex-basis: {{ section.settings.column_width1 }}%;
+    order: {{ section.settings.swap_column }};
+    position: relative;
+} 
+
+.section-{{ section.id }} .content-wrap .column-2 {
+    flex-basis: {{ section.settings.column_width2 }}%;
+    /* display: flex;
+    flex-direction: column; */
+}
+
+.section-{{ section.id }} .content-wrap .column-2 img {
+    /* width: 100%; */
+}
+    
+.section-{{ section.id }} .section-heading {
+   text-align: {{ section.settings.heading_align }};
+}
+
+.section-{{ section.id }} .image-box-wrapper {
+    display: flex;
+    align-items: baseline !important;
+}
+
+.section-{{ section.id }} .image-box-wrapper .image-box-item{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center; 
+}
+.section-{{ section.id }} .image-box-wrapper .image-box-item img{
+    object-fit: contain;  
+}
+
+.section-{{ section.id }} .page-width {
+
+  {% if section.settings.section_width == 'fullwidth' %}
+   max-width: 95%;
+
+  {% else %}
+  
+       max-width: 87%;
+
+  {% endif %}
+} 
+
+
+.video-background {
+    position: absolute;
+    width: 125%;
+    height: 125%;
+    top: -17%;
+    left: -13%;
+    z-index: -1;
+}
+
+@media only screen and (max-width: 1700px){
+ .video-background {
+    position: absolute;
+    width: 143%;
+    height: 169%;
+    top: -35%;
+    left: -21%;
+    z-index: -1;
+}
+}
+
+
+@media only screen and (max-width: 999px){
+ .video-background {
+  position: absolute;
+    width: 342%;
+    height: 239%;
+    top: -72%;
+    left: -118%;
+    z-index: -1;
+}
+}
+
+.video-background-mobile {
+  display: none;
+}
+
+.video-background iframe {
+  width: 100%;
+  height: 100%;
+
+}
+
+
+@media only screen and (max-width: 767px){
+  .video-background-mobile {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: -88%;
+    width: 273%;
+    height: 100%;
+}
+   .section-template--22062380745019__two_column_section_G9MdeJ .content-wrap .column-1 {
+    overflow: hidden; 
+  } 
+}
+
+.video-background-mobile iframe {
+    width: 100%;
+    height: 100%;
+}
+}  
+
+{%- endstyle -%}
+<div class="section-wrapper background-sec {{ section.settings.class_name }} section-{{ section.id }}-padding section-{{ section.id }} scroll-trigger animate--slide-in">
+  
+  <div class="page-width"> 
+
+    {% if section.settings.video_url != blank %}
+        <div class="video-background">
+           {%- if section.settings.video_url.type == 'youtube' -%}
+                {% comment %}  <iframe
+                    src="https://www.youtube.com/embed/{{ section.settings.video.id | default: section.settings.video_url.id }}?enablejsapi=1&autoplay=1{{ loop }}"
+                    class="js-youtube"
+                    allow="autoplay; encrypted-media" 
+                    allowfullscreen
+                    title="{{ section.settings.description | escape }}"
+                  ></iframe>
+               {% endcomment %}
+                 <iframe 
+                   src="https://www.youtube.com/embed/{{ section.settings.video_url.id }}?playsinline=1&autoplay=1&controls=0&mute=1&playlist={{ section.settings.video_url.id }}&enablejsapi=1&rel=0&modestbranding=1&origin={{ 'https://' | append: request.host | url_encode }}" 
+                   allow="autoplay; encrypted-media" 
+                   allowfullscreen="allowfullscreen"
+                   frameborder="0">
+                </iframe>
+                {%- else -%}
+                  <iframe
+                    src="https://player.vimeo.com/video/{{ section.settings.video.id | default: section.settings.video_url.id }}?autoplay=1{{ loop }}"
+                    class="js-vimeo"
+                   {% if section.settings.auto_play == true %} allow="autoplay; encrypted-media"  {% endif %}
+                    allowfullscreen
+                    title="{{ section.settings.description | escape }}"
+                  ></iframe>
+            {%- endif -%}
+        </div>
+    {% endif %}
+    <h2 class="section-heading">{{ section.settings.section_heading }}</h2>
+    <h3 class="section-subheading">{{ section.settings.section_subheading }}</h3>
+    <div class="content-wrap"> 
+  
+        <div class="column-1">
+          {% if section.settings.side_image != blank %}
+           <img class="side-image" src="{{section.settings.side_image | img_url: 'master' }}" alt="{{block.settings.side_image.alt}}" width="{{block.settings.side_image.width}}" height="{{block.settings.side_image.height}}" /> 
+          {% endif %}
+      {% if section.settings.video_url != blank %}
+        <div class="video-background-mobile">
+           {%- if section.settings.video_url.type == 'youtube' -%}
+                {% comment %}  <iframe
+                    src="https://www.youtube.com/embed/{{ section.settings.video.id | default: section.settings.video_url.id }}?enablejsapi=1&autoplay=1{{ loop }}"
+                    class="js-youtube"
+                    allow="autoplay; encrypted-media" 
+                    allowfullscreen
+                    title="{{ section.settings.description | escape }}"
+                  ></iframe>
+
+               {% endcomment %}
+                 <iframe 
+                   src="https://www.youtube.com/embed/{{ section.settings.video_url.id }}?playsinline=1&autoplay=1&controls=0&mute=1&playlist={{ section.settings.video_url.id }}&enablejsapi=1&rel=0&modestbranding=1&origin={{ 'https://' | append: request.host | url_encode }}" 
+                   allow="autoplay; encrypted-media" 
+                   allowfullscreen="allowfullscreen"
+                   frameborder="0">
+                </iframe>
+                {%- else -%}
+                  <iframe
+                    src="https://player.vimeo.com/video/{{ section.settings.video.id | default: section.settings.video_url.id }}?autoplay=1{{ loop }}"
+                    class="js-vimeo"
+                   {% if section.settings.auto_play == true %} allow="autoplay; encrypted-media"  {% endif %}
+                    allowfullscreen
+                    title="{{ section.settings.description | escape }}"
+                  ></iframe>
+          {%- endif -%}
+           
+        </div>
+    {% endif %}
+        </div>
+        <div class="column-2">
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+
+              {%- when 'column_image' -%}
+                  <div class="column-image-wrap"> 
+                  <img class="img-responsive column-image" src="{{block.settings.column_image | img_url: 'master' }}" alt="{{block.settings.column_image.alt}}" width="{{block.settings.column_image.width}}" height="{{block.settings.column_image.height}}">
+                  </div>
+              {%- when 'heading' -%}
+              
+              <h2 class="head text-{{ block.settings.head_text_align }}">{{block.settings.heading}}</h2>  
+          
+              {%- when 'sub_heading' -%}
+              
+              <h3 class="subhead text-{{ block.settings.subhead_text_align }}">{{block.settings.sub_heading}}</h3> 
+          
+              {%- when 'paragraph' -%}
+              
+               <div class="paragraph text-{{ block.settings.paragraph_text_align }}">{{block.settings.paragraph_content}}</div>
+              
+              {%- when 'button' -%}
+              
+              <div class="button-wrap d-flex justify-content-{{ block.settings.btn_align }}">
+              <button class="default-btn"><a href="{{block.settings.button_link}}">{{block.settings.button_text}}</a></button>
+              </div>
+
+              {%- when 'icon_with_heading' -%}
+
+              <div class="image-box-wrapper" {{block.settings.text_style}}" {{block.shopify_attributes}}>
+                    {% if block.settings.icon1!= blank or block.settings.icon_heading1 != blank %}
+                      <div class="image-box-item">
+                        <img class="m-auto img-responsive" src="{% if block.settings.icon1 != blank %} {{block.settings.icon1 | img_url: 'master'}} {% endif %}" alt="{{block.settings.icon1.alt}}" width="{{block.settings.icon1.width}}" height="{{block.settings.icon1.height}}">
+                        <h3>{{block.settings.icon_heading1}}</h3>
+                      </div>
+                    {% endif %}
+                    {% if block.settings.icon2 != blank or block.settings.icon_heading2 != blank %}
+                      <div class="image-box-item">
+                        <img class="m-auto img-responsive" src="{% if block.settings.icon2 != blank %} {{ block.settings.icon2 | img_url: 'master' }} {% endif %}" alt="{{ block.settings.icon2.alt }}" width="{{ block.settings.icon2.width }}" height="{{ block.settings.icon2.height }}">
+                       <h3>{{block.settings.icon_heading2}}</h3>
+                      </div>
+                    {% endif %}
+                    {% if block.settings.icon3 != blank or block.settings.icon_heading3 != blank %}
+                      <div class="image-box-item">
+                        <img class="m-auto img-responsive" src="{% if block.settings.icon3 != blank %} {{block.settings.icon3 | img_url: 'master'}} {% endif %}" alt="{{block.settings.icon3.alt}}" width="{{block.settings.icon3.width}}" height="{{block.settings.icon3.height}}">
+                        <h3>{{block.settings.icon_heading3}}</h3>
+                      </div>
+                    {% endif %}
+                    {% if block.settings.icon4 != blank or block.settings.icon_heading4 != blank %}
+                      <div class="image-box-item">
+                        <img class="m-auto img-responsive image-box-image" src="{% if block.settings.icon4 != blank %} {{block.settings.icon4 | img_url: 'master'}} {% endif %}" alt="{{block.settings.icon4.alt}}" width="{{block.settings.icon4.width}}" height="{{block.settings.icon4.height}}">
+                        <h3>{{block.settings.icon_heading4}}</h3>
+                      </div> 
+                    {% endif %}  
+               </div>
+          
+            {%- endcase -%}
+            {%- endfor -%}  
+        </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+  "name": "Two Column Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "class_name",
+      "label": "Class Name"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_video_looping",
+      "label": "t:sections.video.settings.enable_video_looping.label",
+      "default": false
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "accept": ["youtube", "vimeo"],
+      "label": "Video URL"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section Width",
+      "options": [
+        {
+          "value": "fullwidth",
+          "label": "fullwidth"
+        },
+        {
+          "value": "boxed",
+          "label": "boxed"
+        }
+      ],
+      "default": "fullwidth"
+    },
+    {
+      "type": "image_picker",
+      "id": "section_background_img",
+      "label": "Section Background Image"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section Background Color"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0
+    
+    }, 
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "text",
+      "id": "section_heading",
+      "label": "Section Heading"
+    },
+    {
+      "type": "text",
+      "id": "section_subheading",
+      "label": "Section Sub Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_align",
+      "label": "Heading Align",
+      "options": [
+        {
+          "value": "start",
+          "label": "start"
+        },
+        {
+          "value": "center",
+          "label": "center"
+        },
+        {
+          "value": "end",
+          "label": "end"
+        }
+      ],
+      "default": "start",
+      "info": "Heading Text Alignment" 
+    },
+     {
+      "type": "select",
+      "id": "swap_column",
+      "label": "Swap Column",
+      "options": [
+        {
+          "value": "0",
+          "label": "Swap Column Right To Left"
+        },
+        {
+          "value": "1",
+          "label": "Swap Column Left To Right"
+        }
+      ],
+      "default": "0",
+      "info": "Column Swap"
+    },
+    {
+      "type": "range",
+      "id": "column_width1",
+      "label": "Column Width",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "column_width2",
+      "label": "Column Width",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 50
+    },
+    {
+      "type": "image_picker",
+      "id": "side_image",
+      "label": "Side Image"
+    } 
+  ],
+  "blocks": [
+    {
+      "name": "Heading",
+      "type": "heading",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+        "type": "select",
+        "id": "head_text_align",
+        "label": "Heading Text Align",
+        "options": [
+          {
+            "value": "start",
+            "label": "start"
+          },
+          {
+            "value": "center",
+            "label": "center"
+          },
+          {
+            "value": "end",
+            "label": "end"
+          }
+        ],
+        "default": "start"
+       }
+        
+      ] 
+    },
+    {
+      "name": "Sub heading",
+      "type": "sub_heading",
+      "settings": [
+        {
+          "type": "text",
+          "id": "sub_heading",
+          "label": "Sub Heading",
+          "default": "Sub Heading"
+        },
+        {
+        "type": "select",
+        "id": "subhead_text_align",
+        "label": "Sub Heading Text Align",
+        "options": [
+          {
+            "value": "start",
+            "label": "start"
+          },
+          {
+            "value": "center",
+            "label": "center"
+          },
+          {
+            "value": "end",
+            "label": "end"
+          }
+        ],
+        "default": "start"
+       }
+      ]
+    },
+    {
+      "name": "Button",
+      "type": "button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Button Text"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        },
+        {
+        "type": "select",
+        "id": "btn_align",
+        "label": "Button Alignment",
+        "options": [
+          {
+            "value": "start",
+            "label": "start"
+          },
+          {
+            "value": "center",
+            "label": "center"
+          },
+          {
+            "value": "end",
+            "label": "end"
+          }
+        ],
+        "default": "start"
+       }
+      ]
+    },
+    {
+      "name": "Paragraph",
+      "type": "paragraph",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "paragraph_content",
+          "label": "Paragraph Content"
+        },
+        {
+        "type": "select",
+        "id": "paragraph_text_align",
+        "label": "Paragraph Text Align",
+        "options": [
+          {
+            "value": "start",
+            "label": "start"
+          },
+          {
+            "value": "center",
+            "label": "center"
+          },
+          {
+            "value": "end",
+            "label": "end"
+          }
+        ],
+        "default": "start"
+       }
+      ]
+    },
+    {
+      "name": "Column Image",
+      "type": "column_image",
+      "settings": [
+         {
+          "type": "image_picker",
+          "id": "column_image",
+          "label": "Column Image"
+        }
+      ]
+    },
+    {
+      "name": "Icon with heading",
+      "type": "icon_with_heading",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon1",
+          "label": "Icon"
+        },
+        {
+          "type": "textarea",
+          "id": "icon_heading1",
+          "label": "Icon Heading Item 1"
+        },
+         {
+          "type": "image_picker",
+          "id": "icon2",
+          "label": "Icon"
+        },
+        {
+          "type": "textarea",
+          "id": "icon_heading2",
+          "label": "Icon Heading Item 2"
+        },
+         {
+          "type": "image_picker",
+          "id": "icon3",
+          "label": "Icon"
+        },
+        {
+          "type": "textarea",
+          "id": "icon_heading3",
+          "label": "Icon Heading Item 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon4",
+          "label": "Icon"
+        },
+        {
+          "type": "textarea",
+          "id": "icon_heading4",
+          "label": "Icon Heading Item 4"
+        },
+        {
+        "type": "range",
+        "id": "icon_gap",
+        "label": "Icon gaps",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "default": 2
+      }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Two Column Section"
+    }
+  ]
+}  
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

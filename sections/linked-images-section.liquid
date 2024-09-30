@@ -1,0 +1,275 @@
+{{ 'video-section.css' | asset_url | stylesheet_tag }}
+{{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+        padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+      }
+
+      @media screen and (min-width: 750px) {
+        .section-{{ section.id }}-padding {
+          padding-top: {{ section.settings.padding_top }}px;
+          padding-bottom: {{ section.settings.padding_bottom }}px;
+        }
+      }
+
+    .section-{{ section.id }} .link-image {
+      max-width: 172px;
+      height: auto;
+    }
+    .section-{{ section.id }} .testimonial-videos-container {
+         gap: 40px 0px;
+    }
+    .section-{{ section.id }}  .link-wrapper {
+      text-decoration: none;
+    }
+
+    .section-{{ section.id }}  .image-link-btn{
+          background-color: #3a5160;
+          color: #fff;
+          font-size: 24px;
+          border-radius: 5px;
+          text-decoration: none;
+          padding: 5px 30px;
+    }     
+        
+ 
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient {{ section.settings.classname }}">
+  <div class="page-width section-{{ section.id }}-padding section-{{ section.id }}">
+    <div
+      {% if section.settings.full_width %}
+        class="page-width"
+      {% endif %}
+    >
+      {%- unless section.settings.heading == blank -%}
+        <div class="title-wrapper title-wrapper--no-top-margin{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+          <h2 class="title inline-richtext {{ section.settings.heading_size }} text-{{ section.settings.heading_align }}">
+            {{ section.settings.heading }}
+          </h2>
+        </div>
+      {%- endunless -%}
+
+      <div class="row testimonial-videos-container  scroll-trigger animate--slide-in">
+        {% for block in section.blocks %}
+      
+        <div class="col-md-4 text-center image-item-wrap">
+            <a href="{{ block.settings.image_link }}" class="link-wrapper">
+              {% if block.settings.image_heading != blank %}  
+                <h2 class="image-link-head m-auto">{{ block.settings.image_heading }}</h2> 
+                {% endif %}
+              
+              {% if block.settings.image_url != blank %}  
+                <div class="image-link-wrap">
+                <img loading="lazy" class="link-image"src="{{ block.settings.image_url | image_url }}" alt="{{ block.settings.image_url.image_url.alt }}" width="{{ block.settings.image_url.width }}" height="{{ block.settings.image_url.height }}"/>
+                </div>   
+               {% endif %}
+            </a>  
+        </div>
+       
+      {% endfor %}
+        {% if section.settings.btn_text != blank %}
+          <div class="d-flex justify-content-center">
+            <a href="{{ section.settings.btn_url }}"class="image-link-btn">{{ section.settings.btn_text }}</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Link Images Section",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+     {
+      "type": "text",
+      "id": "classname",
+      "label": "Class Name"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text"
+    },
+    {
+      "type": "url",
+      "id": "btn_url",
+      "label": "Button URL"
+    }
+    ,
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "Video",
+      "label": "t:sections.video.settings.heading.label"
+    },
+    {
+      "type": "select",
+      "id": "heading_align",
+      "options": [
+        {
+          "value": "start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "end",
+          "label": "End"
+        }
+      ],
+      "default": "start",
+      "label": "Heading Alignment"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.all.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.all.heading_size.options__2.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.all.heading_size.options__3.label"
+        }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_video_looping",
+      "label": "t:sections.video.settings.enable_video_looping.label",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.video.settings.header__1.content"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "t:sections.video.settings.video.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.video.settings.header__2.content"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.video.settings.paragraph.content"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url_1",
+      "accept": ["youtube", "vimeo"],
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+      "label": "Video URL 1",
+      "info": "t:sections.video.settings.video_url.info"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url_2",
+      "accept": ["youtube", "vimeo"],
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+      "label": "Video URL 2",
+      "info": "t:sections.video.settings.video_url.info"
+    }
+    ,
+    {
+      "type": "image_picker",
+      "id": "cover_image",
+      "label": "t:sections.video.settings.cover_image.label"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "t:sections.video.settings.description.label",
+      "info": "t:sections.video.settings.description.info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.video.settings.header__3.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "t:sections.video.settings.full_width.label",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ], 
+  "blocks": [
+    {
+      "name": "Link Images",
+      "type": "image_link",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "image_heading",
+          "label": "Testimonial Name"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_url",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "image_link",
+          "label": "Image Link/URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Link Images Section"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,142 @@
+<style>
+        .custom-variant-picker-container {
+            display: grid;
+            grid-template-columns: repeat(3 , 1fr);
+            gap: 30px;
+            padding-right: 10%;
+        }
+        .variant-item ul{
+            padding-left: 20px;
+        }
+
+         .variant-item ul li {
+          font-size: 12px;
+          font-weight: 500;
+          line-height: 1.4em;
+        }
+       
+        .variant-item {
+          padding: 15px 15px;
+          background-color: #fff;
+          border-radius: 15px;
+          cursor: pointer;
+        }
+        .varian-image-wrap {
+            display: flex;  
+            justify-content: center;
+        }
+        .variant-content-wrap {
+            padding-top: 10px;
+            text-align: start;
+        }
+
+        .variant-title {
+            font-size: 13px;
+            font-weight: 900;
+            position: relative;
+            width: fit-content;
+            margin-bottom: 2%;
+        }
+
+        .variant-title::after {
+           content: '';
+            position: absolute;
+            right: -30%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            background-image: url('https://cdn.shopify.com/s/files/1/0849/7158/5851/files/varian-icon.png?v=1711360831');
+            background-size: contain;
+            background-repeat: no-repeat;
+          z-index: 1;
+        }
+  
+        .active {
+            border: #1E9D70 solid;
+        }
+        .variant-head {
+          font-size: 17px;
+          font-family: Sofia Pro;
+          font-weight: 500;
+          letter-spacing: 0.6px;
+          color: #25343E;
+        }
+</style>
+
+<p class="variant-head">Select your Topper Zones*</p>
+<div class="custom-variant-picker-container">
+       
+        <div class="variant-item">
+            <div class="varian-image-wrap">
+                <img src="https://cdn.shopify.com/s/files/1/0849/7158/5851/files/Single-Zone.png?v=1711360581" alt="" class="variant-image">
+            </div>
+            <div class="variant-content-wrap">
+                <p class="variant-title">Single Zone</p>
+                <ul>
+                     <li>Twin</li>
+                     <li>Twin XL</li>
+                     <li>Full / Double</li>
+                </ul>   
+            </div>      
+        </div>
+        <div class="variant-item">
+            <div class="varian-image-wrap">
+                <img src="https://cdn.shopify.com/s/files/1/0849/7158/5851/files/dual_zone_eb827f3b-f16f-4939-b48e-167471fc2dad.png?v=1711360582" alt="" class="variant-image">
+            </div>
+            <div class="variant-content-wrap">
+                <p class="variant-title">Dual Zone</p>
+                <ul>
+                     <li>Queen</li>
+                     <li>King</li>
+                     <li>California King</li>
+                </ul>   
+            </div> 
+        </div>
+        <div class="variant-item">
+            <div class="varian-image-wrap">
+                <img src="https://cdn.shopify.com/s/files/1/0849/7158/5851/files/Split_Zone.png?v=1711360582" alt="" class="variant-image">
+            </div>
+            <div class="variant-content-wrap">
+                <p class="variant-title">Split Zone</p>
+                <ul>
+                     <li>Split King</li>
+                </ul>   
+            </div>
+        </div>
+</div>
+
+
+
+  
+  <select id="select_variant" class="select" autocomplete="off" id="product-select-{{ section.id }}-{{ product.id }}" name="id" form="{{ product_form_id }}">
+    {%- for variant in product.variants -%}      
+      <option {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %} {% unless variant.available %}disabled="disabled"{% endunless %} value="{{ variant.id }}" data-value="{{ variant.title | escape }}" data-sku="{{ variant.sku }}" data-price="{{ variant.price | money }}" data-compare_price="{{ variant.compare_at_price | money }}">{{ variant.title }} - {{ variant.price | money }}</option>
+    {%- endfor -%}
+  </select>
+
+<script>
+  let varian_items = document.querySelectorAll(".variant-item")
+
+   varian_items.forEach(varian_item => {
+
+           varian_item.addEventListener('click', function(e){
+            
+            this.classList.add('active');
+      
+            // Remove class from other elements with the same class
+            varian_items.forEach(otherBox => {
+            
+            if (otherBox !== this) {
+
+            otherBox.classList.remove('active');
+
+            }       
+            
+        }) 
+    }) 
+
+   });
+</script>
+
+

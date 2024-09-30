@@ -1,0 +1,314 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}%;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}%;
+    background-color: {{ section.settings.section_background_color }};
+    {% if section.settings.section_background_img %}
+    background-image: url({{ section.settings.section_background_img | img_url: 'master' }});
+    {% endif %}
+    background-position: top center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  .section-{{ section.id }}-padding .subheading {
+    color: {{ section.settings.subheading_color }}
+  }
+  .section-{{ section.id }}-padding .main-heading {
+    color: {{ section.settings.heading_color }}
+  }
+  .section-{{ section.id }}-padding .body,
+  .section-{{ section.id }}-padding .section-custom-content{
+    color: {{ section.settings.content_color }}
+  }
+  
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}%;
+      padding-bottom: {{ section.settings.padding_bottom }}%;
+    }
+  }
+
+.section-{{ section.id }} .content-wrap{
+    display: flex;
+
+}
+
+.section-{{ section.id }} .content-wrap .column-1 {
+    width: {{ section.settings.column_width1 }}%;
+    order: {{ section.settings.swap_column }};
+} 
+
+.section-{{ section.id }} .content-wrap .column-2 {
+    width: {{ section.settings.column_width2 }}%;
+    /* display: flex;
+    flex-direction: column; */
+}
+
+.section-{{ section.id }} .content-wrap .column-2 img {
+    /* width: 100%; */
+}
+    
+.section-{{ section.id }} .section-heading {
+   text-align: {{ section.settings.heading_align }};
+}
+
+.section-{{ section.id }} .image-box-wrapper {
+    display: flex;
+    align-items: baseline !important;
+}
+
+.section-{{ section.id }} .image-box-wrapper .image-box-item{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center; 
+}
+.section-{{ section.id }} .image-box-wrapper .image-box-item img{
+    object-fit: contain;  
+}
+
+.section-{{ section.id }} .page-width {
+
+  {% if section.settings.section_width == 'fullwidth' %}
+   max-width: 95%;
+
+  {% else %}
+  
+       max-width: 87%;
+
+  {% endif %}
+}
+
+.section-{{ section.id }} .column-1 img {
+   object-fit: cover;
+   width: 100%;
+   height: 100%;
+}
+
+.section-{{ section.id }} .column-2 {
+   background-color: {{ section.settings.slider_bg_color }};
+}
+
+
+
+
+{%- endstyle -%}
+
+<div class="section-wrapper background-sec {{ section.settings.class_name }} section-{{ section.id }}-padding section-{{ section.id }}">
+  
+  <div class="page-width"> 
+     
+    <h2 class="section-heading">{{ section.settings.section_heading }}</h2>
+    <h3 class="section-subheading">{{ section.settings.section_subheading }}</h3>
+    <div class="content-wrap"> 
+        <div class="column-1">
+              <img class="img-responsive" src="{% if section.settings.side_image != blank %} {{ section.settings.side_image | img_url: 'master' }} {% endif %} " alt="{{ section.settings.side_image.alt }}" width="{{ block.settings.side_image.width }}" height="{{ block.settings.side_image.height }}""/>
+        </div>
+        <div class="column-2">
+            <h2 class="slider-heading">Hear what healthcare providers are saying</h2>
+           <div class="slider-wrapper">
+
+            {%- for block in section.blocks -%}
+                  <div class="slider-item">
+                    <div class="slider-content">
+                       <div class="slider-headline">{{ block.settings.slider_headline }}</div>
+                       <h4 class="slider-name">{{ block.settings.slider_name }}</h4>   
+                    </div>
+                  </div>          
+            {%- endfor -%} 
+          </div>
+        </div>  
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+  "name": "Slider Side Image",
+  "settings": [
+    {
+      "type": "text",
+      "id": "class_name",
+      "label": "Class Name"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section Width",
+      "options": [
+        {
+          "value": "fullwidth",
+          "label": "fullwidth"
+        },
+        {
+          "value": "boxed",
+          "label": "boxed"
+        }
+      ],
+      "default": "fullwidth"
+    },
+    {
+      "type": "image_picker",
+      "id": "section_background_img",
+      "label": "Section Background Image"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section Background Color"
+    }
+    ,
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0
+    
+    }, 
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "text",
+      "id": "section_heading",
+      "label": "Section Heading"
+    },
+    {
+      "type": "text",
+      "id": "section_subheading",
+      "label": "Section Sub Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_align",
+      "label": "Heading Align",
+      "options": [
+        {
+          "value": "start",
+          "label": "start"
+        },
+        {
+          "value": "center",
+          "label": "center"
+        },
+        {
+          "value": "end",
+          "label": "end"
+        }
+      ],
+      "default": "start",
+      "info": "Heading Text Alignment" 
+    },
+     {
+      "type": "select",
+      "id": "swap_column",
+      "label": "Swap Column",
+      "options": [
+        {
+          "value": "0",
+          "label": "Swap Column Right To Left"
+        },
+        {
+          "value": "1",
+          "label": "Swap Column Left To Right"
+        }
+      ],
+      "default": "0",
+      "info": "Column Swap"
+    },
+    {
+      "type": "range",
+      "id": "column_width1",
+      "label": "Column Width",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "column_width2",
+      "label": "Column Width",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 50
+    },
+    {
+      "type": "image_picker",
+      "id": "side_image",
+      "label": "Side Image"
+    },
+    {
+      "type": "color",
+      "id": "slider_bg_color",
+      "label": "Slider Background Color"
+    }
+    
+  ],
+  "blocks": [
+      {
+      "name": "Slider Item",
+      "type": "slider_item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "slider_head",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "slider_headline",
+          "label": "Slider Headline"
+        },
+        {
+          "type": "text",
+          "id": "slider_name",
+          "label": "Name"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Slider Side Image"
+    }
+  ]
+}  
+{% endschema %}
+
+<script>
+    $(document).ready(function () {
+    $(".slider-wrapper").slick({ 
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    speed: 700,
+    autoplaySpeed: 800,
+    infinite: true,
+    autoplay: false,
+    dots: true,
+    responsive: [{
+                        breakpoint: 1024, //Breakpoint of the slider on the Tablet view.
+                        settings: {
+                        slidesToShow: 1, //This will indicate the number of slides that will show on the tablet view.
+                        }
+                    },
+                    {
+                        breakpoint: 768,  //Breakpoint of the slider on the mobile view.
+                        settings: {
+                        slidesToShow: 1, //This will indicate the number of slides that will show on the mobile view.
+                        }
+                    }
+              ]
+    });
+  });
+</script>

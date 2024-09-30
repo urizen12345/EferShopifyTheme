@@ -1,0 +1,838 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}%;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}%;
+    background-color: {{ section.settings.section_background_color }};
+    {% if section.settings.section_background_img %}
+    background-image: url({{ section.settings.section_background_img | img_url: 'master' }});
+    {% endif %}
+    background-position: top center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  .section-{{ section.id }}-padding .subheading {
+    color: {{ section.settings.subheading_color }}
+  }
+  .section-{{ section.id }}-padding .main-heading {
+    color: {{ section.settings.heading_color }}
+  }
+  .section-{{ section.id }}-padding .body,
+  .section-{{ section.id }}-padding .section-custom-content{
+    color: {{ section.settings.content_color }}
+  }
+  
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}%;
+      padding-bottom: {{ section.settings.padding_bottom }}%;
+    }
+  }
+{% comment %} defaults {% endcomment %}
+{% comment %} custom columns breakpoint {% endcomment %}
+ @media screen and (max-width: 999px) {
+  .section-{{ section.id }} .content-wrap {
+    flex-direction: column;
+  }
+  .section-{{ section.id }} .content-wrap .image-column , .section-{{ section.id }} .content-wrap .content-column {
+     width: 100% !important; 
+  }
+}
+
+.section-{{ section.id }} .content-wrap{
+    display: flex; //default wrap
+}
+
+.section-{{ section.id }} .content-wrap .image-column {
+    width: {{ section.settings.column_width1 }}%; {% comment %} column width {% endcomment %}
+    order: {{ section.settings.swap_column }}; {% comment %} swap the column {% endcomment %}
+} 
+
+.section-{{ section.id }} .content-wrap .content-column {
+    width: {{ section.settings.column_width2 }}%;  {% comment %} column width {% endcomment %}
+    padding: 2%; 
+    display: flex;
+    flex-direction: column;
+    justify-content: {{ section.settings.align_items }};
+}
+
+.section-{{ section.id }} .content-wrap .content-column button {
+   width: fit-content;
+   height: fit-content;
+}
+  
+{% comment %} default image size {% endcomment %}
+.section-{{ section.id }} .content-wrap .image-column .side-image {
+   width: 100%;
+   height: auto;
+   object-fit: cover;
+}
+  
+{% comment %} section heading-align {% endcomment %}    
+.section-{{ section.id }} .section-heading {
+   text-align: {{ section.settings.section_heading_align }};
+}
+  
+{% comment %} section subheading-align {% endcomment %}      
+.section-{{ section.id }} .section-subheading {
+  text-align: {{ section.settings.section_subheading_align }};
+}
+.section-{{ section.id }} .image-box-wrapper {
+    display: flex;
+    align-items: baseline !important;
+    gap: 20px;
+}
+
+
+.section-{{ section.id }} .image-box-wrapper .image-box-item{
+    display: flex;
+    flex-direction: column;
+    text-align: center;   
+}
+
+{% comment %} default imagebox icon {% endcomment %}
+.section-{{ section.id }} .image-box-wrapper .image-box-item img{
+    height: auto;
+    max-width: 30px;
+    object-fit: cover; 
+}
+
+.section-{{ section.id }} .page-width {
+  {% if section.settings.section_width == 'fullwidth' %}
+   max-width: 95%;
+  {% else %}
+       max-width: 87%;
+  {% endif %}
+}  
+
+
+/* item box defaults */
+.item-box-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.item-image-wrap {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 10px;
+} 
+
+.item-content-wrap {
+    text-align: center;
+}  
+
+{%- endstyle -%}
+<div class="section-wrapper background-sec {{ section.settings.class_name }} section-{{ section.id }}-padding section-{{ section.id }}">
+  
+  <div class="page-width"> 
+    
+    {% if section.settings.section_heading != blank %}     
+    <h2 class="section-heading">{{ section.settings.section_heading }}</h2>
+    {% endif %}
+    {% if section.settings.section_subheading != blank %}   
+    <h3 class="section-subheading">{{ section.settings.section_subheading }}</h3>
+    {% endif %}
+    <div class="content-wrap"> 
+        <div class="image-column">
+              <img class="img-responsive side-image" src="{% if section.settings.side_image != blank %} {{ section.settings.side_image | img_url: 'master' }} {% endif %} " alt="{{ section.settings.side_image.alt }}" width="{{ block.settings.side_image.width }}" height="{{ block.settings.side_image.height }}"/>
+        </div>
+        <div class="content-column">
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+
+              {%- when 'column_image' -%}
+                  <div class="column-image-wrap"> 
+                  <img class="img-responsive column-image" src="{{block.settings.column_image | img_url: 'master' }}" alt="{{block.settings.column_image.alt}}" width="{{block.settings.column_image.width}}" height="{{block.settings.column_image.height}}">
+                  </div>
+              {%- when 'heading' -%}
+              
+              <h2 class="head text-{{ block.settings.head_text_align }}">{{block.settings.heading}}</h2>  
+          
+              {%- when 'sub_heading' -%}
+              
+              <h3 class="subhead text-{{ block.settings.subhead_text_align }}">{% if block.settings.heading_image != blank %} <img src="{{block.settings.heading_image | img_url: 'master' }}" alt="{{block.settings.heading_image.alt}}" width="{{block.settings.heading_image.width}}" height="{{block.settings.heading_image.height}}"> {% endif %} {{block.settings.sub_heading}}</h3> 
+          
+              {%- when 'paragraph' -%}
+              
+               <div class="paragraph text-{{ block.settings.paragraph_text_align }}">{{block.settings.paragraph_content}}</div>
+              
+              {%- when 'button' -%}
+              
+              <div class="button-wrap d-flex justify-content-{{ block.settings.btn_align }}">
+              <button class="default-btn"><a href="{{block.settings.button_link}}">{{block.settings.button_text}}</a></button>
+              </div>
+
+              {%- when 'icon_with_heading' -%}
+
+              <div class="image-box-wrapper" {{block.settings.text_style}}" {{block.shopify_attributes}}>
+                    {% if block.settings.icon1!= blank or block.settings.icon_heading1 != blank %}
+                      <div class="image-box-item">
+                        <img class="m-auto img-responsive" src="{% if block.settings.icon1 != blank %} {{block.settings.icon1 | img_url: 'master'}} {% endif %}" alt="{{block.settings.icon1.alt}}" width="{{block.settings.icon1.width}}" height="{{block.settings.icon1.height}}">
+                        <h3>{{block.settings.icon_heading1}}</h3>
+                      </div>
+                    {% endif %}
+                    {% if block.settings.icon2 != blank or block.settings.icon_heading2 != blank %}
+                      <div class="image-box-item">
+                        <img class="m-auto img-responsive" src="{% if block.settings.icon2 != blank %} {{ block.settings.icon2 | img_url: 'master' }} {% endif %}" alt="{{ block.settings.icon2.alt }}" width="{{ block.settings.icon2.width }}" height="{{ block.settings.icon2.height }}">
+                       <h3>{{block.settings.icon_heading2}}</h3>
+                      </div>
+                    {% endif %}
+                    {% if block.settings.icon3 != blank or block.settings.icon_heading3 != blank %}
+                      <div class="image-box-item">
+                        <img class="m-auto img-responsive" src="{% if block.settings.icon3 != blank %} {{block.settings.icon3 | img_url: 'master'}} {% endif %}" alt="{{block.settings.icon3.alt}}" width="{{block.settings.icon3.width}}" height="{{block.settings.icon3.height}}">
+                        <h3>{{block.settings.icon_heading3}}</h3>
+                      </div>
+                    {% endif %}
+                    {% if block.settings.icon4 != blank or block.settings.icon_heading4 != blank %}
+                      <div class="image-box-item">
+                        <img class="m-auto img-responsive image-box-image" src="{% if block.settings.icon4 != blank %} {{block.settings.icon4 | img_url: 'master'}} {% endif %}" alt="{{block.settings.icon4.alt}}" width="{{block.settings.icon4.width}}" height="{{block.settings.icon4.height}}">
+                        <h3>{{block.settings.icon_heading4}}</h3>
+                      </div> 
+                    {% endif %}  
+               </div>
+
+               {%- when 'item_with_content' -%}
+
+              <div class="item-box-wrapper" {{block.settings.text_style}} {{block.shopify_attributes}}>
+                    {% if block.settings.item1_image !=blank  or block.settings.item1_head or block.settings.item1_subhead !=blank or block.settings.item1_content !=blank  %}
+
+                    <div class="item-box">
+                      <div class="item-image-wrap">
+                          <img class="m-auto img-responsive item-image" src="{% if block.settings.item1_image != blank %} {{block.settings.item1_image | img_url: 'master'}} {% endif %}" alt="{{block.settings.item1_image.alt}}" width="{{block.settings.item1_image.width}}" height="{{block.settings.item1_image.height}}">
+                      </div>  
+                      <div class="item-content-wrap">
+                        <h2 class="item-heading">{{block.settings.item1_head}}</h2>
+                        <h3 class="item-subheading">{{block.settings.item1_subhead}}</h3>
+                        <div class="item-paragraph">
+                          {{ block.settings.item1_content }}
+                      
+                        </div>
+                      </div>
+                    </div>
+                
+                   {% endif %}
+
+                
+                   {% if block.settings.item2_image !=blank or block.settings.item2_head !=blank or block.settings.item2_subhead !=blank or block.settings.item2_content !=blank %}
+
+                    <div class="item-box">
+                      <div class="item-image-wrap">
+                          <img class="m-auto img-responsive item-image" src="{% if block.settings.item2_image != blank %} {{block.settings.item2_image | img_url: 'master'}} {% endif %}" alt="{{block.settings.item2_image.alt}}" width="{{block.settings.item2_image.width}}" height="{{block.settings.item2_image.height}}">
+                      </div>  
+                      <div class="item-content-wrap">
+                        <h2 class="item-heading">{{block.settings.item2_head}}</h2>
+                        <h3 class="item-subheading">{{block.settings.item2_subhead}}</h3>
+                        <div class="item-paragraph">
+                          {{ block.settings.item2_content }}
+                        </div>
+                      </div>
+                    </div>
+                
+                   {% endif %} 
+
+                   {% if block.settings.item3_image !=blank  or block.settings.item3_head !=blank or block.settings.item3_subhead !=blank or block.settings.item3_content !=blank %}
+
+                    <div class="item-box">
+                      
+                     <div class="item-image-wrap">
+                          <img class="m-auto img-responsive item-image" src="{% if block.settings.item3_image != blank %} {{block.settings.item3_image | img_url: 'master'}} {% endif %}" alt="{{block.settings.item3_image.alt}}" width="{{block.settings.item3_image.width}}" height="{{block.settings.item3_image.height}}">
+                      </div>  
+                      <div class="item-content-wrap">
+                        <h2 class="item-heading">{{block.settings.item3_head}}</h2>
+                        <h3 class="item-subheading">{{block.settings.item3_subhead}}</h3>
+                        <div class="item-paragraph">
+                          {{ block.settings.item3_content }}
+                        </div>
+                      </div>
+                    </div>
+                
+                   {% endif %} 
+
+
+                     {% if block.settings.item4_image !=blank  or block.settings.item4_head !=blank or block.settings.item4_subhead !=blank or block.settings.item4_content !=blank %}
+
+                    <div class="item-box">
+                      
+                      <div class="item-image-wrap">
+                          <img class="m-auto img-responsive item-image" src="{% if block.settings.item4_image != blank %} {{block.settings.item4_image | img_url: 'master'}} {% endif %}" alt="{{block.settings.item4_image.alt}}" width="{{block.settings.item4_image.width}}" height="{{block.settings.item4_image.height}}">
+                      </div>  
+                      <div class="item-content-wrap">
+                        <h2 class="item-heading">{{block.settings.item4_head}}</h2>
+                        <h3 class="item-subheading">{{block.settings.item4_subhead}}</h3>
+                        <div class="item-paragraph">
+                          {{ block.settings.item4_content }}
+                        </div>
+                      </div>
+                    </div>
+                
+                   {% endif %} 
+
+
+                   {% if block.settings.item5_image !=blank  or block.settings.item5_head !=blank or block.settings.item5_subhead !=blank or block.settings.item5_content !=blank %}
+
+                    <div class="item-box">
+                      
+                      <div class="item-image-wrap">
+                          <img class="m-auto img-responsive item-image" src="{% if block.settings.item5_image != blank %} {{block.settings.item5_image | img_url: 'master'}} {% endif %}" alt="{{block.settings.item5_image.alt}}" width="{{block.settings.item5_image.width}}" height="{{block.settings.item5_image.height}}">
+                      </div>  
+                      <div class="item-content-wrap">
+                        <h2 class="item-heading">{{block.settings.item5_head}}</h2>
+                        <h3 class="item-subheading">{{block.settings.item5_subhead}}</h3>
+                        <div class="item-paragraph">
+                          {{ block.settings.item5_content }}
+                        </div>
+                      </div>
+                    </div>
+                
+                   {% endif %} 
+
+                   {% if block.settings.item6_image !=blank  or block.settings.item6_head !=blank or block.settings.item6_subhead !=blank or block.settings.item6_content !=blank %}
+
+                    <div class="item-box">
+                    
+                      <div class="item-image-wrap">
+                          <img class="m-auto img-responsive item-image" src="{% if block.settings.item6_image != blank %} {{block.settings.item6_image | img_url: 'master'}} {% endif %}" alt="{{block.settings.item6_image.alt}}" width="{{block.settings.item6_image.width}}" height="{{block.settings.item6_image.height}}">
+                      </div>        
+                      <div class="item-content-wrap">
+                        <h2 class="item-heading">{{block.settings.item6_head}}</h2>
+                        <h3 class="item-subheading">{{block.settings.item6_subhead}}</h3>
+                        <div class="item-paragraph">
+                          {{ block.settings.item6_content }}
+                        </div>
+                      </div>
+                    </div>
+                
+                {% endif %} 
+
+          
+            {%- endcase -%}
+            {%- endfor -%}  
+        </div>
+    </div>
+  </div>
+</div>
+</div>
+{% schema %}
+  {
+  "name": "Cstm Image With Text",
+  "settings": [
+    {
+      "type": "text",
+      "id": "class_name",
+      "label": "Class Name"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section Width",
+      "options": [
+        {
+          "value": "fullwidth",
+          "label": "fullwidth"
+        },
+        {
+          "value": "boxed",
+          "label": "boxed"
+        }
+      ],
+      "default": "fullwidth"
+    },
+    {
+      "type": "image_picker",
+      "id": "section_background_img",
+      "label": "Section Background Image"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section Background Color"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0
+    
+    }, 
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "text",
+      "id": "section_heading",
+      "label": "Section Heading"
+    },
+    {
+      "type": "select",
+      "id": "section_heading_align",
+      "label": "Heading Align",
+      "options": [
+        {
+          "value": "start",
+          "label": "start"
+        },
+        {
+          "value": "center",
+          "label": "center"
+        },
+        {
+          "value": "end",
+          "label": "end"
+        }
+      ],
+      "default": "start",
+      "info": "Section Heading Align" 
+    },
+    {
+      "type": "text",
+      "id": "section_subheading",
+      "label": "Section Sub Heading"
+    },
+    {
+      "type": "select",
+      "id": "section_subheading_align",
+      "label": "Section Sub Heading Align",
+      "options": [
+        {
+          "value": "start",
+          "label": "start"
+        },
+        {
+          "value": "center",
+          "label": "center"
+        },
+        {
+          "value": "end",
+          "label": "end"
+        }
+      ],
+      "default": "start",
+      "info": "Section Heading Align" 
+    },
+    {
+      "type": "select",
+      "id": "swap_column",
+      "label": "Swap Column",
+      "options": [
+        {
+          "value": "0",
+          "label": "Swap Image To Left"
+        },
+        {
+          "value": "1",
+          "label": "Swap Image To Right"
+        }
+      ],
+      "default": "0",
+      "info": "Column Swap"
+    },
+    {
+      "type": "range",
+      "id": "column_width1",
+      "label": "Left Column Width",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "column_width2",
+      "label": "Right Column Width ",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "default": 50
+    },
+    {
+      "type": "image_picker",
+      "id": "side_image",
+      "label": "Side Image"
+    },
+    {
+      "type": "select",
+      "id": "align_items",
+      "label": "Align Contents",
+      "options": [
+        {
+          "value": "start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "end",
+          "label": "End"
+        },
+        {
+          "value": "start-between",
+          "label": "Space Between"
+        },
+        {
+          "value": "space-evenly",
+          "label": "Space Evenly"
+        }
+      ],
+      "default": "space-evenly",
+      "info": "Space Evenly"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Heading",
+      "type": "heading",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+        "type": "select",
+        "id": "head_text_align",
+        "label": "Heading Text Align",
+        "options": [
+          {
+            "value": "start",
+            "label": "start"
+          },
+          {
+            "value": "center",
+            "label": "center"
+          },
+          {
+            "value": "end",
+            "label": "end"
+          }
+        ],
+        "default": "start"
+       }  
+      ] 
+    },
+    {
+      "name": "Sub heading",
+      "type": "sub_heading",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "sub_heading",
+          "label": "Sub Heading",
+          "default": "Sub Heading"
+        },
+        {
+        "type": "select",
+        "id": "subhead_text_align",
+        "label": "Sub Heading Text Align",
+        "options": [
+          {
+            "value": "start",
+            "label": "start"
+          },
+          {
+            "value": "center",
+            "label": "center"
+          },
+          {
+            "value": "end",
+            "label": "end"
+          }
+        ],
+        "default": "start"
+       },
+        {
+          "type": "image_picker",
+          "id": "heading_image",
+          "label": "Image heading"  
+        } 
+      ]
+    },
+    {
+      "name": "Button",
+      "type": "button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Button Text"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        },
+        {
+        "type": "select",
+        "id": "btn_align",
+        "label": "Button Alignment",
+        "options": [
+          {
+            "value": "start",
+            "label": "start"
+          },
+          {
+            "value": "center",
+            "label": "center"
+          },
+          {
+            "value": "end",
+            "label": "end"
+          }
+        ],
+        "default": "start"
+       }
+      ]
+    },
+    {
+      "name": "Paragraph",
+      "type": "paragraph",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "paragraph_content",
+          "label": "Paragraph Content"
+        },
+        {
+        "type": "select",
+        "id": "paragraph_text_align",
+        "label": "Paragraph Text Align",
+        "options": [
+          {
+            "value": "start",
+            "label": "start"
+          },
+          {
+            "value": "center",
+            "label": "center"
+          },
+          {
+            "value": "end",
+            "label": "end"
+          }
+        ],
+        "default": "start"
+       }
+      ]
+    },
+    {
+      "name": "Column Image",
+      "type": "column_image",
+      "settings": [
+         {
+          "type": "image_picker",
+          "id": "column_image",
+          "label": "Column Image"
+        }
+      ]
+    },
+    {
+      "name": "Icon with heading",
+      "type": "icon_with_heading",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon1",
+          "label": "Icon"
+        },
+        {
+          "type": "textarea",
+          "id": "icon_heading1",
+          "label": "Icon Heading Item 1"
+        },
+         {
+          "type": "image_picker",
+          "id": "icon2",
+          "label": "Icon"
+        },
+        {
+          "type": "textarea",
+          "id": "icon_heading2",
+          "label": "Icon Heading Item 2"
+        },
+         {
+          "type": "image_picker",
+          "id": "icon3",
+          "label": "Icon"
+        },
+        {
+          "type": "textarea",
+          "id": "icon_heading3",
+          "label": "Icon Heading Item 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon4",
+          "label": "Icon"
+        },
+        {
+          "type": "textarea",
+          "id": "icon_heading4",
+          "label": "Icon Heading Item 4"
+        },
+        {
+        "type": "range",
+        "id": "icon_gap",
+        "label": "Icon gaps",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "default": 2
+      }
+      ]
+    }, 
+    {
+      "name": "Item with Content",
+      "type": "item_with_content",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "item1_image",
+          "label": "Item 1 Image"
+        },
+        {
+          "type": "textarea",
+          "id": "item1_head",
+          "label": "Item 1 Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "item1_subhead",
+          "label": "Item 1 Sub Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "item1_content",
+          "label": "Item 1 Content "
+        },
+        {
+          "type": "image_picker",
+          "id": "item2_image",
+          "label": "Item 2 Image"
+        },
+        {
+          "type": "textarea",
+          "id": "item2_head",
+          "label": "Item 2 Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "item2_subhead",
+          "label": "Item 2 Sub Heading"
+        }
+        ,
+        {
+          "type": "richtext",
+          "id": "item2_content",
+          "label": "Item 2 Content"
+        },
+        {
+          "type": "image_picker",
+          "id": "item3_image",
+          "label": "Item 3 Image"
+        },
+        {
+          "type": "textarea",
+          "id": "item3_head",
+          "label": "Item 3 Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "item3_subhead",
+          "label": "Item 3 Sub Heading"
+        }
+        ,
+        {
+          "type": "richtext",
+          "id": "item3_content",
+          "label": "Item 3 Content "
+        },
+        {
+          "type": "image_picker",
+          "id": "item4_image",
+          "label": "Item 4 Image"
+        },
+        {
+          "type": "textarea",
+          "id": "item4_head",
+          "label": "Item 4 Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "item4_subhead",
+          "label": "Item 4 Sub Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "item4_content",
+          "label": "Item 4 Content "
+        },
+        {
+          "type": "image_picker",
+          "id": "item5_image",
+          "label": "Item 5 Image"
+        },
+        {
+          "type": "textarea",
+          "id": "item5_head",
+          "label": "Item 5 Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "item5_subhead",
+          "label": "Item 5 Sub Heading"
+        }
+        ,
+        {
+          "type": "richtext",
+          "id": "item5_content",
+          "label": "Item 5 Content "
+        },
+        {
+          "type": "image_picker",
+          "id": "item6_image",
+          "label": "Item 6 Image"
+        },
+        {
+          "type": "textarea",
+          "id": "item6_head",
+          "label": "Item 6 Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "item6_subhead",
+          "label": "Item 6 Sub Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "item6_content",
+          "label": "Item 6 Content "
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cstm Image With Text"
+    }
+  ]
+}  
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

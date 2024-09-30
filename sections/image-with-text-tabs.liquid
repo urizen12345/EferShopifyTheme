@@ -1,0 +1,145 @@
+{%- style -%}
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+        padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+      }
+
+      @media screen and (min-width: 750px) {
+        .section-{{ section.id }}-padding {
+          padding-top: {{ section.settings.padding_top }}px;
+          padding-bottom: {{ section.settings.padding_bottom }}px;
+        }
+      }
+
+ 
+{%- endstyle -%}
+
+<div class="page-width section-{{ section.id }}-padding section-{{ section.id }} ">
+  <div class="image-with-text-wrapper {{ section.settings.class_name }}">
+  <div class="side-tabs-wrapper">
+     {% for block in section.blocks %}
+      <div class="side-tab {{ block.id }}"></div>
+     {% endfor %}
+  </div>
+  <nav class="top-tabs-wrapper">
+    {% for block in section.blocks %}
+        <button class="tab-btn" href="{{ block.id }}">{{ block.settings.tab_heading }}</button>
+    {% endfor %}
+  </nav>
+    {% for block in section.blocks %}
+       <div class="tab-content {{ block.id }}" >
+        <div class="tab-item">
+             <div class="content-wrapper">
+                <h2>{{ block.settings.heading }}</h2>
+                <div class="content">
+                    <h3>{{ block.settings.content_heading1 }}</h3>
+                    <p>{{ block.settings.content1 }}</p>
+                </div>
+                <div class="content">
+                    <h3>{{ block.settings.content_heading2 }}</h3>
+                    <p>{{ block.settings.content2 }}</p>
+                </div>     
+            </div>
+            <div class="img-wrapper">
+                  <img src="{{ block.settings.image_content | image_url }}" alt="">
+            </div>
+        </div>
+    </div>
+   {% endfor %}
+
+</div>
+</div>
+
+
+
+{% schema %}
+  {
+  "name": "Image with tabs",
+  "settings": [
+    {
+          "type": "text",
+          "id": "class_name",
+          "label": "Class Name"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+   "blocks": [
+    {
+      "name": "Tab Item",
+      "type": "tab_item",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "tab_heading",
+          "label": "Tab Heading"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_content",
+          "label": "Image Content"
+        },
+        {
+          "type": "textarea",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "content_heading1",
+          "label": "Content Heading 1"
+        }
+        ,
+        {
+          "type": "textarea",
+          "id": "content1",
+          "label": "Content 1"
+        }
+        ,
+        {
+          "type": "text",
+          "id": "content_heading2",
+          "label": "Content Heading 2"
+        }
+        ,
+        {
+          "type": "textarea",
+          "id": "content2",
+          "label": "Content 2"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with tabs"
+    }
+  ]
+}  
+{% endschema %}
+
+
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

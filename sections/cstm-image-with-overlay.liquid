@@ -1,0 +1,305 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}%;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}%;
+    background-color: {{ section.settings.section_background_color }};
+    {% if section.settings.section_background_img %}
+    background-image: url({{ section.settings.section_background_img | img_url: 'master' }});
+    {% endif %}
+    background-position: top center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  .section-{{ section.id }}-padding .subheading {
+    color: {{ section.settings.subheading_color }}
+  }
+  .section-{{ section.id }}-padding .main-heading {
+    color: {{ section.settings.heading_color }}
+  }
+  .section-{{ section.id }}-padding .body,
+  .section-{{ section.id }}-padding .section-custom-content{
+    color: {{ section.settings.content_color }}
+  }
+  
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}%;
+      padding-bottom: {{ section.settings.padding_bottom }}%;
+      position: relative;
+    }
+  }
+
+ .section-{{ section.id }} .page-width {
+
+  {% if section.settings.section_width == 'fullwidth' %}
+    
+      max-width: 95%;
+  
+  {% else %}
+    
+       max-width: 87%;
+   
+  {% endif %}
+  
+}
+
+ 
+.section-{{ section.id }} .heading{
+     color: {{blocks.settings.heading_color}};
+}
+
+.section-{{ section.id }} .subhead{
+     color: {{blocks.settings.subhead_color}};
+     
+}
+ 
+
+{%- endstyle -%}
+<div class="section-wrapper background-sec {{ section.settings.class_name }} section-{{ section.id }}-padding section-{{ section.id }}">
+  <div class="page-width"> 
+    
+    <div class="content-wrap"> 
+       
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+
+              {%- when 'column_image' -%}
+               <div class="column-image-wrap">
+                    <img class="img-responsive column-image" src="{{block.settings.column_image | img_url: 'master' }}" alt="{{block.settings.column_image.alt}}" width="{{block.settings.column_image.width}}" height="{{block.settings.column_image.height}}">
+               </div>
+            
+              {%- when 'heading' -%}
+              
+               <h2 class="head text-{{ block.settings.head_text_align }}">{{block.settings.heading}}</h2>  
+          
+              {%- when 'sub_heading' -%}
+              
+              <h3 class="subhead text-{{ block.settings.subhead_text_align }}">{{block.settings.sub_heading}}</h3> 
+          
+              {%- when 'paragraph' -%}
+              
+               <div class="paragraph text-{{ block.settings.paragraph_text_align }}">{{block.settings.paragraph_content}}</div>
+              
+              {%- when 'button' -%}
+              <div class="button-wrap d-flex justify-content-{{ block.settings.btn_align }}">
+
+              <button class="default-btn"><a href="{{block.settings.button_link}}">{{block.settings.button_text}}</a></button>
+
+              </div>
+    
+            
+            {%- endcase -%}
+
+            {%- endfor -%}  
+      
+    </div>
+</div>
+
+{% schema %}
+  {
+  "name": "Cstm Section with overlay",
+  "settings": [
+    {
+      "type": "text",
+      "id": "class_name",
+      "label": "Class Name"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section Width",
+      "options": [
+        {
+          "value": "fullwidth",
+          "label": "fullwidth"
+        },
+        {
+          "value": "boxed",
+          "label": "boxed"
+        }
+      ],
+      "default": "fullwidth"
+    },
+    {
+      "type": "image_picker",
+      "id": "section_background_img",
+      "label": "Section Background Image"
+    },
+        {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0
+    
+    }, 
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0
+    }
+  ],
+  "blocks": [
+     {
+      "name": "Heading",
+      "type": "heading",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+        "type": "select",
+        "id": "head_text_align",
+        "label": "Heading Text Align",
+        "options": [
+          {
+            "value": "start",
+            "label": "start"
+          },
+          {
+            "value": "center",
+            "label": "center"
+          },
+          {
+            "value": "end",
+            "label": "end"
+          }
+        ],
+        "default": "start"
+       },
+       {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Heading Color"
+      }
+           
+      ] 
+    },
+    {
+      "name": "Sub heading",
+      "type": "sub_heading",
+      "settings": [
+        {
+          "type": "text",
+          "id": "sub_heading",
+          "label": "Sub Heading",
+          "default": "Sub Heading"
+        },
+        {
+        "type": "select",
+        "id": "subhead_text_align",
+        "label": "Sub Heading Text Align",
+        "options": [
+          {
+            "value": "start",
+            "label": "start"
+          },
+          {
+            "value": "center",
+            "label": "center"
+          },
+          {
+            "value": "end",
+            "label": "end"
+          }
+        ],
+        "default": "start"
+       },
+      {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Heading Color"
+      }
+      ]
+    },
+    {
+      "name": "Button",
+      "type": "button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Button Text"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        },
+        {
+        "type": "select",
+        "id": "btn_align",
+        "label": "Button Alignment",
+        "options": [
+          {
+            "value": "start",
+            "label": "start"
+          },
+          {
+            "value": "center",
+            "label": "center"
+          },
+          {
+            "value": "end",
+            "label": "end"
+          }
+        ],
+        "default": "start"
+       }
+      ]
+    },
+    {
+      "name": "Paragraph",
+      "type": "paragraph",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "paragraph_content",
+          "label": "Paragraph Content"
+        },
+        {
+        "type": "select",
+        "id": "paragraph_text_align",
+        "label": "Paragraph Text Align",
+        "options": [
+          {
+            "value": "start",
+            "label": "start"
+          },
+          {
+            "value": "center",
+            "label": "center"
+          },
+          {
+            "value": "end",
+            "label": "end"
+          }
+        ],
+        "default": "start"
+       }
+      ]
+    } 
+  ],
+  "presets": [
+    {
+      "name": "Cstm Section with overlay"
+    }
+  ]
+}  
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

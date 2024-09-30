@@ -1,0 +1,342 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}%;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}%;
+    background-color: {{ section.settings.section_background_color }};
+    {% if section.settings.section_background_img %}
+    background-image: url({{ section.settings.section_background_img | img_url: 'master' }});
+    {% endif %}
+    background-position: top center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  .section-{{ section.id }}-padding .subheading {
+    color: {{ section.settings.subheading_color }}
+  }
+  .section-{{ section.id }}-padding .main-heading {
+    color: {{ section.settings.heading_color }}
+  }
+  .section-{{ section.id }}-padding .body,
+  .section-{{ section.id }}-padding .section-custom-content{
+    color: {{ section.settings.content_color }}
+  }
+  
+@media screen and (min-width: 750px) {
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}%;
+    padding-bottom: {{ section.settings.padding_bottom }}%;
+  }
+}
+
+.section-{{ section.id }} .content-wrap{
+    display: flex;
+}
+
+.section-{{ section.id }} .content-wrap .column-1 {
+    flex-basis: {{ section.settings.column_width1 }}%;
+    order: {{ section.settings.swap_column }};
+} 
+
+.section-{{ section.id }} .content-wrap .column-2 {
+    flex-basis: {{ section.settings.column_width2 }}%;
+}
+
+.section-{{ section.id }} .content-wrap .column-2 img {
+    /* width: 100%; */
+}
+    
+.section-{{ section.id }} .section-heading {
+   text-align: {{ section.settings.heading_align }};
+}
+
+.section-{{ section.id }} .image-box-wrapper {
+    display: flex;
+    align-items: baseline !important;
+}
+
+.section-{{ section.id }} .image-box-wrapper .image-box-item{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center; 
+}
+.section-{{ section.id }} .image-box-wrapper .image-box-item img{
+    object-fit: contain;  
+}
+
+.section-{{ section.id }} .page-width {
+
+  {% if section.settings.section_width == 'fullwidth' %}
+   max-width: 95%;
+  {% else %}
+       max-width: 87%;
+  {% endif %}
+  
+}
+
+ 
+  
+{%- endstyle -%}
+<div class="section-wrapper background-sec {{ section.settings.class_name }} section-{{ section.id }}-padding section-{{ section.id }}">
+  
+  <div class="page-width"> 
+    <div class="footer-upper-wrap"> 
+        <div class="logo-area">
+          {% if section.settings.footer_logo != blank%}
+            <img class="img-responsive footer-logo" src="{% if section.settings.footer_logo != blank %} {{section.settings.footer_logo | img_url: 'master'}} {% endif %}" alt="{{section.footer_logo.alt}}" width="{{section.settings.footer_logo.width}}" height="{{section.settings.footer_logo.height}}">
+          {% endif %}
+
+          {% if section.settings.footer_logo_paragraph != blank %} 
+              <div class="footer-paragraph"> {{ section.settings.footer_logo_paragraph }} </div>
+           {% endif  %} 
+        </div>
+        <div class="quick-links-area">
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+
+              {%- when 'quick_links' -%}
+               
+                <ul class="quick-links-wrapper">  
+                {% for link in linklists[block.settings.quick_links].links %}
+                 <li class="quick-link">
+                  <a href="{{ link.url }}">{{ link.title }}</a> 
+                 </li>
+                {% endfor %}
+                </ul>
+                
+            {%- endcase -%}
+          {%- endfor -%}  
+        </div>
+
+        <div class="form-area"> 
+          <p class="form-content">{{ section.settings.form_content1 }}</p>
+           <div class="news-letter-form-container">
+           {%- form 'contact', id: 'ContactForm', class: contact_form_class -%}
+              {%- if form.posted_successfully? -%}
+                <h2 class="form-status form-status-list form__message" tabindex="-1" autofocus>
+                  {% render 'icon-success' %}
+                  {{ 'templates.contact.form.post_success' | t }}
+                </h2>
+              {%- elsif form.errors -%}
+                <div class="form__message">
+                  <h2 class="form-status caption-large text-body" role="alert" tabindex="-1" autofocus>
+                    {% render 'icon-error' %}
+                    {{ 'templates.contact.form.error_heading' | t }}
+                  </h2>
+                </div>
+                <ul class="form-status-list caption-large" role="list">
+                  <li>
+                    <a href="#ContactForm-email" class="link">
+                      {{ form.errors.translated_fields.email | capitalize }}
+                      {{ form.errors.messages.email }}
+                    </a>
+                  </li>
+                </ul>
+              {%- endif -%}
+              {% if section.settings.form_logo != blank %}
+              <div class="form-logo-wrap">
+                  <img class="form-logo img-responsive" src="{{section.settings.form_logo | img_url }}" alt="{{section.settings.form_logo.alt}}" width="{{section.settings.form_logo.width}}" height="{{section.settings.form_logo.height}}">
+              </div>
+              {% endif %}   
+              <div class="form-paragraph">{{ section.settings.form_paragraph }}</div>
+              <div class="custom-form-fields-wrap">
+             
+                <div class="custom-input-wrap field--with-error">
+                  <input
+                    autocomplete="email"
+                    type="email"
+                    id="ContactForm-email"
+                    class="custom-field-input"
+                    name="contact[email]"
+                    spellcheck="false"
+                    autocapitalize="off"
+                    value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                    aria-required="true"
+                    {% if form.errors contains 'email' %}
+                      aria-invalid="true"
+                      aria-describedby="ContactForm-email-error"
+                    {% endif %}
+                    placeholder="Enter Your Email"
+                  >
+                  {%- if form.errors contains 'email' -%}
+                    <small class="contact__field-error" id="ContactForm-email-error">
+                      <span class="visually-hidden">{{ 'accessibility.error' | t }}</span>
+                      <span class="form__message">
+                        {%- render 'icon-error' -%}
+                        {{- form.errors.translated_fields.email | capitalize }}
+                        {{ form.errors.messages.email -}}
+                      </span>
+                    </small>
+                  {%- endif -%}
+                 <button type="submit" class="custom-form-submit-button">
+                    <img class="img-fluid img-responsive" src ="https://cdn.shopify.com/s/files/1/0849/7158/5851/files/form-btn-icon_398ab3c7-dc9f-4285-af9a-2e82c033483f.png?v=1706783036" alt="footer-icon-form"/>
+                 </button>
+                </div>  
+            </div>
+             
+            {%- endform -%}
+        </div>
+          <p class="form-content">{{ section.settings.form_content2 }}</p> 
+            
+          <div class="form-image-wrapper">
+             {% if section.settings.form_image1 != blank %}
+               <img class="img-responsive" src="{% if section.settings.form_image1 != blank %} {{ section.settings.form_image1 | img_url: 'master' }} {% endif %} " alt="{{ section.settings.form_image1.alt }}" width="{{ section.settings.form_image1.width }}" height="{{ section.settings.form_image1.height }}"/>
+             {% endif %}  
+             {% if section.settings.form_image2 != blank %}
+               <img class="img-responsive" src="{% if section.settings.form_image2 != blank %} {{ section.settings.form_image2 | img_url: 'master' }} {% endif %} " alt="{{ section.settings.form_image2.alt }}" width="{{ section.settings.form_image2.width }}" height="{{ section.settings.form_image2.height }}"/>
+             {% endif %}  
+           </div>
+        </div>
+    </div>
+
+    <div class="footer-lower-wrap"> 
+          {% if section.settings.copy_rights != blank %}
+           <p class="copyright">{{ section.settings.copy_rights }}</p>
+          {% endif %} 
+          <ul class="footer-lower-links">
+              {% for block in section.blocks %}
+              {%- case block.type -%}
+                {%- when 'single_link' -%}
+            
+                   <li><a href="{{ block.settings.single_link }}" class="footer-single-link">{{ block.settings.single_link_label }}</a></li>
+                   
+                {%- endcase -%}
+              {% endfor %}  
+          </ul>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+  "name": "Custom Footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "class_name",
+      "label": "Class Name"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section Width",
+      "options": [
+        {
+          "value": "fullwidth",
+          "label": "fullwidth"
+        },
+        {
+          "value": "boxed",
+          "label": "boxed"
+        }
+      ],
+      "default": "fullwidth"
+    }
+    ,
+     {
+      "type": "image_picker",
+      "id": "footer_logo",
+      "label": "Footer Logo"
+    },
+    {
+      "type": "richtext",
+      "id": "footer_logo_paragraph",
+      "label": "Footer Logo Paragraph"
+    },
+    {
+      "type": "text",
+      "id": "copy_rights",
+      "label": "Copy Rights Reserved"
+    },
+    {
+      "type": "image_picker",
+      "id": "section_background_img",
+      "label": "Footer Background Image"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Footer Background Color"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0
+    
+    }, 
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "text",
+      "id": "form_content1",
+      "label": "Form Content 1"
+    },
+    {
+      "type": "text",
+      "id": "form_content2",
+      "label": "Form Content 2"
+    }, 
+    {
+      "type": "image_picker",
+      "id": "form_image1",
+      "label": "Form Image 1"
+    },
+     {
+      "type": "image_picker",
+      "id": "form_image2",
+      "label": "Form Image 2"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Quick Links",
+      "type": "quick_links",
+      "settings": [
+         {
+          "type": "link_list",
+          "id": "quick_links",
+          "label": "Quick Links"
+        } 
+      ] 
+    },
+    {
+      "name": "Footer Single Link",
+      "type": "single_link",
+      "settings": [
+         {
+          "type": "text",
+          "id": "single_link_label",
+          "label": "Single Link Label"
+         },
+         {
+          "type": "url",
+          "id": "single_link",
+          "label": "Footer Single Link"
+        } 
+      ] 
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Footer"
+    }
+  ]
+}  
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

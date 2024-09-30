@@ -1,0 +1,61 @@
+<div class="pbi-select-wrapper">
+
+  <div id="zone_charts">
+    <label for="select_size">FIRST select your Topper zone*</label>
+  </div>
+  
+  <div class="pbi-custom-selector-boxes">
+    <div class="pbi-custom-selector-box">
+      <label data-value="Single Zone">
+        <img src="https://cdn.shopify.com/s/files/1/0041/4302/2144/files/single_zone_38414afa-788e-4c9d-8afc-e610f788b486.png?v=1707120362" alt="Single Zone" width="38" height="75" />
+        <span>Single Zone</span>
+        <ul>
+          <li>Twin</li>
+          <li>Twin XL</li>
+          <li>Full / Double</li>          
+        </ul>
+      </label>
+    </div>
+    <div class="pbi-custom-selector-box">
+      <label data-value="Dual Zone">
+        <img src="https://cdn.shopify.com/s/files/1/0041/4302/2144/files/dual_zone_1.png?v=1707120362" alt="Dual Zone" width="75" height="75" />
+        <span>Dual Zone</span>
+        <ul>
+          <li>Queen</li>
+          <li>King</li>
+          <li>California King</li>          
+        </ul>
+      </label>
+    </div>
+    <div class="pbi-custom-selector-box">
+      <label data-value="Split-Zone">
+        <img src="https://cdn.shopify.com/s/files/1/0041/4302/2144/files/split_zone.png?v=1707120362" alt="Split-Zone" width="78" height="75" />
+        <span>Split-Zone</span>
+        <ul>
+          <li>Split King</li>     
+        </ul>
+      </label>
+    </div>
+  </div>
+
+  <div id="size_charts">
+    <label for="select_size">THEN select your size:</label>
+    <span>
+      <a href="#measurements-dimensions" class="pbi-size-btn-trigger">Sizing Chart</a>
+    </span>
+  </div>
+  
+  <select id="select_size">
+    <option value="">Select your size</option>
+    {%- for value in product.options_by_name['Select your size'].values %}
+      <option value="{{ value | escape }}">{{ value }}</option>
+    {%- endfor %}
+  </select>
+  
+  <select id="select_variant" class="select" autocomplete="off" id="product-select-{{ section.id }}-{{ product.id }}" name="id" form="{{ product_form_id }}">
+    {%- for variant in product.variants -%}      
+      <option {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %} {% unless variant.available %}disabled="disabled"{% endunless %} value="{{ variant.id }}" data-value="{{ variant.title | escape }}" data-sku="{{ variant.sku }}" data-price="{{ variant.price | money }}" data-compare_price="{{ variant.compare_at_price | money }}">{{ variant.title }} - {{ variant.price | money }}</option>
+    {%- endfor -%}
+  </select>
+
+</div>

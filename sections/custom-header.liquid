@@ -1,0 +1,118 @@
+<head>
+   <script src="https://kit.fontawesome.com/6226269109.js" crossorigin="anonymous"></script>
+</head>
+ <nav class="nav-wrapper">
+            <div class="logo-wrapper">
+                <span class="nav-toggler"><img src="https://cdn.shopify.com/s/files/1/0849/7158/5851/files/burger-menu.png?v=1707101405" alt=""></span>
+                <a href="/"><img class="img-responsive header-logo" src="{{ section.settings.header_logo | img_url : 'master' }}" alt="{{section.settings.header_logo.alt }}" width="{{ section.settings.header_logo.width }}" height="{{ section.settings.header_logo.height }}"></a>
+            </div>
+            
+            <div class="menu-wrapper">  
+               <li class="nav-exit-wrapper"><span class="nav-exit"><img src="https://cdn.shopify.com/s/files/1/0849/7158/5851/files/x-close.png?v=1707102551" alt=""></span></li>
+               {% for link in linklists[section.settings.menu].links %}
+                    {% if link.links != empty %}
+                    <li class="nav-link-child-wrap">
+                          <a class="nav-link-toggler" onclick="toggle_dropdown(this)">{{ link.title }}
+                            <i class="fa fa-caret-down"></i>
+                          </a>
+                          <div class="nav-link-child-drop-down">
+                        {% for childlink in link.links %}
+                            <a href="{{ childlink.url }}">{{ childlink.title }}</a>
+                        {% endfor %}
+                         </div>
+                      </li> 
+                   {% else %}
+                  <li class="nav-link"><a href="{{ link.url }}">{{ link.title }}</a></li>
+                  {% endif %}
+               {% endfor %}
+            </div>
+            <div class="cart-wrapper">
+                   <a class="cart-link-desktop" href="/cart"><img src="https://cdn.shopify.com/s/files/1/0849/7158/5851/files/header-cart-icon.png?v=1706837834" alt=""></a>
+                   <a class="cart-link-mobile" href="/cart"><img src="https://cdn.shopify.com/s/files/1/0849/7158/5851/files/car-image-mob.png?v=1707100566" alt=""></a>
+                  <button class="default-btn btn-desktop"><a href="#">TRY 30 DAYS FREE</a></button> 
+                   <button class="default-btn btn-mobile"><a href="#">SHOP</a></button> 
+            </div>
+ </nav> 
+                    
+                   
+{% schema %}
+  {
+    "name": "Custom: Header",
+    "settings": [
+      {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:sections.header.settings.menu.label"
+      },
+      {
+      "type": "image_picker",
+      "id": "header_logo",
+      "label": "header Logo"
+       }
+      ,
+      {
+        "type": "url",
+        "id": "btn_url",
+        "label": "Button Link"
+      },
+      {
+        "type": "text",
+        "id": "btn_text",
+        "label": "Button Text"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Custom: Header",
+        "blocks": []
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+<script>
+
+    document.querySelector(".nav-toggler").addEventListener("click", function(){
+        document.querySelector(".menu-wrapper").classList.add("toggle-nav");
+    });
+    document.querySelector(".nav-exit").addEventListener("click", function(){
+        document.querySelector(".menu-wrapper").classList.remove("toggle-nav");
+    });
+
+    let child_link_dropdown= document.querySelectorAll(".nav-link-child-drop-down")
+
+    function toggle_dropdown(clickedElement) {
+      
+      const className = clickedElement.className;
+      
+      // Close other items with the same class
+      const itemsWithSameClass = document.querySelectorAll(`.${className}`);
+  
+      itemsWithSameClass.forEach((item, index) => {
+        if (item !== clickedElement) {
+          child_link_dropdown[index].classList.remove("toggle-child-dropdown")
+        } else {
+          child_link_dropdown[index].classList.toggle("toggle-child-dropdown")
+        }
+      });
+
+    }
+
+    /* remove class when toggler is not clicked */
+    window.onclick = function(event) {
+      if (event.target.classList != 'nav-link-toggler') {
+        child_link_dropdown.forEach(function (dropdown_hide){
+
+            dropdown_hide.classList.remove('toggle-child-dropdown')
+            
+        })
+      }
+    }   
+</script>
+
+
+{% javascript %}
+{% endjavascript %}
