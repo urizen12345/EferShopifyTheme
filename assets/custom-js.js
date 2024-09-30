@@ -75,7 +75,6 @@ $(document).ready(function () {
   })
   
   
-   
   var targetElement1 = document.querySelector(".icon-content-item");
   var targetElement2 = document.querySelector(".tab-content");
   var targetElement3 = document.querySelector(".side-tab");
