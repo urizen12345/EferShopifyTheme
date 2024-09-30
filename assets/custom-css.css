@@ -424,6 +424,7 @@ a:not([href]) {
 .header:not(.drawer-menu).page-width {
   padding-left: 3rem !important;
   padding-right: 3rem !important;
+  background-color: red;
 }
 
 sticky-header.header-wrapper.color-scheme-780aefb6-091f-4f47-93c6-5cb62217dc04.gradient.header-wrapper--border-bottom {
@@ -601,7 +602,7 @@ sticky-header.header-wrapper.color-scheme-780aefb6-091f-4f47-93c6-5cb62217dc04.g
 }
 
 .hp-section-1 .column-image {
-  margin-top: 15%;
+  margin-top: 7%;
 }
 
 .hp-section-1 .column-2 .default-btn {
@@ -635,7 +636,7 @@ sticky-header.header-wrapper.color-scheme-780aefb6-091f-4f47-93c6-5cb62217dc04.g
 
 /* section 2 */
 .hp-section-2 .section-heading {
-  color: #25343e;
+  color: #213644;
   text-align: center;
   font-family: Montserrat;
   font-size: 46px;
@@ -3379,7 +3380,7 @@ sticky-header.header-wrapper.color-scheme-780aefb6-091f-4f47-93c6-5cb62217dc04.g
   .header:not(.drawer-menu).page-width {
     padding-left: 1rem !important;
     padding-right: 0 !important;
-    background-color: red;
+
   }
 
   .desktop-btn {
